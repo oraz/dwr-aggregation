@@ -10,6 +10,40 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>war</packaging>
     <artifactId>dwr-aggregation-web</artifactId>
+    <name>Simple test webapp</name>
 
+    <properties>
+        <application.http.port>8080</application.http.port>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <configuration>
+                    <path>/adminmgmt</path>
+                    <port>${application.http.port}</port>
+                    <skipErrorOnShutdown>true</skipErrorOnShutdown>
+                    <fork>true</fork>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-application</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run-war-only</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-application</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>shutdown</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
+        </plugins>
+    </build>
 </project>

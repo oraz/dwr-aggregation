@@ -11,6 +11,7 @@
         <module>dwr-aggregation-web</module>
     </modules>
     <packaging>pom</packaging>
+    <name>DWR Aggregation parent</name>
 
     <developers>
         <developer>
