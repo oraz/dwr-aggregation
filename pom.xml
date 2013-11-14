@@ -5,8 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dwr-aggregation</groupId>
-    <artifactId>dwr-aggregation</artifactId>
+    <artifactId>dwr-aggregation-parent</artifactId>
     <version>1.0</version>
+    <modules>
+        <module>dwr-aggregation-web</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <developers>
         <developer>
