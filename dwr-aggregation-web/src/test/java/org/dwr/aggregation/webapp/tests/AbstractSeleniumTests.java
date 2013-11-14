@@ -3,6 +3,8 @@ package org.dwr.aggregation.webapp.tests;
 import org.dwr.aggregation.webapp.tests.pages.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 
@@ -15,12 +17,15 @@ import static java.lang.Integer.parseInt;
 public abstract class AbstractSeleniumTests {
     protected final String Acceptance = "acceptance";
     private WebDriver driver;
+    private Wait<WebDriver> wait;
     private Properties acceptanceProperties;
 
     @BeforeGroups(groups = Acceptance)
     public final void initDriver() throws IOException {
         loadAcceptanceProperties();
         driver = new FirefoxDriver();
+        final int timeOutInSeconds = parseInt(acceptanceProperties.getProperty("webdriver.timeout"));
+        wait = new WebDriverWait(driver, timeOutInSeconds, 50);
     }
 
     @AfterGroups(groups = Acceptance)
@@ -36,7 +41,7 @@ public abstract class AbstractSeleniumTests {
 
     protected <T extends AbstractPage> T getPage(final String pageUrl, final Class<T> pageClass) {
         final T page = newInstance(pageClass);
-        page.init(driver);
+        page.init(wait);
         driver.get(String.format("http://%s:%d%s%s",
                 acceptanceProperties.getProperty("application.http.host"),
                 parseInt(acceptanceProperties.getProperty("application.http.port")),
