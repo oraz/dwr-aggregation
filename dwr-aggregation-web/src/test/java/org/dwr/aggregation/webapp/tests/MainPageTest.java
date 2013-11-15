@@ -12,7 +12,8 @@ public class MainPageTest extends AbstractSeleniumTests {
     @DataProvider
     public Object[][] pageUrls() {
         return new Object[][]{
-                {"/html/notAggregatedServices.html"}
+                {"/html/notAggregatedServices.html"},
+//                {"/html/aggregatedServices.html"}
         };
     }
 
