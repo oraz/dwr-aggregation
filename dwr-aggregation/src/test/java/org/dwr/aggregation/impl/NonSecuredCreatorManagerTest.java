@@ -8,10 +8,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class NonSecuredCreatorManagerTest {
     private final NonSecuredCreatorManager manager = new NonSecuredCreatorManager();
@@ -25,18 +25,36 @@ public class NonSecuredCreatorManagerTest {
     }
 
     @Test(dataProvider = "debugModes")
-    public void testGetCreatorNamesWhenDebugModIsOn(final boolean debug) {
-        final String firstName = randomAlphabetic(5);
-        final String secondName = randomAlphabetic(5);
-        final String thirdName = randomAlphabetic(5);
+    public void testGetCreatorNamesIncludingHidden(final boolean debug) {
+        final String firstName = "first.js";
+        final String secondName = "second.js";
+        final String thirdName = "third.js";
         final Map<String, Creator> creators = givenCreators(firstName, secondName, thirdName);
 
         manager.setDebug(debug);
         manager.setCreators(creators);
 
-        final Collection<String> creatorNames = manager.getCreatorNames();
+        final Collection<String> creatorNames = manager.getCreatorNames(true);
 
         assertThat(creatorNames, containsInAnyOrder(firstName, secondName, thirdName));
+    }
+
+    @Test(dataProvider = "debugModes")
+    public void testGetCreatorNamesExcludingHidden(final boolean debug) {
+        final String firstName = "first.js";
+        final String secondName = "second.js";
+        final Map<String, Creator> creators = givenCreators(firstName, secondName);
+        final String thirdName = "third.js";
+        final Creator hidden = mock(Creator.class);
+        when(hidden.isHidden()).thenReturn(true);
+        creators.put(thirdName, hidden);
+
+        manager.setDebug(debug);
+        manager.setCreators(creators);
+
+        final Collection<String> creatorNames = manager.getCreatorNames(false);
+
+        assertThat(creatorNames, containsInAnyOrder(firstName, secondName));
     }
 
     private Map<String, Creator> givenCreators(final String... names) {
