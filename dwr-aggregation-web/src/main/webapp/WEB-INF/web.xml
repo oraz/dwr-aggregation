@@ -7,8 +7,12 @@
         <servlet-name>dwr-invoker</servlet-name>
         <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
         <init-param>
-            <param-name>debug</param-name>
-            <param-value>true</param-value>
+            <param-name>url:/dwr-all.js</param-name>
+            <param-value>org.dwr.aggregation.impl.AllScriptHandler</param-value>
+        </init-param>
+        <init-param>
+            <param-name>org.directwebremoting.extend.CreatorManager</param-name>
+            <param-value>org.dwr.aggregation.impl.NonSecuredCreatorManager</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

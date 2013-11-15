@@ -141,5 +141,10 @@
             <artifactId>hamcrest-library</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>dwr-aggregation</groupId>
+            <artifactId>dwr-aggregation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
