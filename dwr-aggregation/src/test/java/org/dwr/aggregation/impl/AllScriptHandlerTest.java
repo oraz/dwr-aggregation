@@ -1,54 +1,54 @@
 package org.dwr.aggregation.impl;
 
-import org.directwebremoting.extend.ModuleManager;
 import org.directwebremoting.impl.DefaultContainer;
 import org.directwebremoting.servlet.CachingHandler;
+import org.dwr.aggregation.impl.mock.MockCachingHandler;
+import org.dwr.aggregation.impl.mock.MockInterfaceHandler;
+import org.dwr.aggregation.impl.mock.MockModuleManager;
 import org.mockito.Mock;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
-import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.StringUtils.join;
-import static org.directwebremoting.servlet.PathConstants.EXTENSION_JS;
 import static org.directwebremoting.servlet.PathConstants.PATH_PREFIX;
 import static org.directwebremoting.util.MimeConstants.MIME_JS;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.testng.Assert.assertEquals;
 
 public class AllScriptHandlerTest {
     private AllScriptHandler handler;
-    @Mock
-    private ModuleManager moduleManager;
-    private String interfaceHandlerUrl;
-    @Mock
-    private CachingHandler interfaceHandler;
-    private String engineHandlerUrl;
-    @Mock
-    private CachingHandler engineHandler;
+    private MockModuleManager moduleManager;
+    private MockInterfaceHandler interfaceHandler;
+    private MockCachingHandler engineHandler;
     private String dtoAllHandlerUrl;
     @Mock
     private CachingHandler dtoAllHandler;
+    private String contextPath = randomAlphabetic(10);
+    private String servletPath = randomAlphabetic(10);
 
     @BeforeMethod
     public void setUp() {
         initMocks(this);
 
-        final DefaultContainer container = new DefaultContainer();
-        container.addParameter("moduleManager", moduleManager);
+        contextPath = randomAlphabetic(10);
+        servletPath = randomAlphabetic(10);
 
-        interfaceHandlerUrl = withRandomPrefix("/interface/");
+        final DefaultContainer container = new DefaultContainer();
+
+        final String interfaceHandlerUrl = withRandomPrefix("/interface/");
         container.addParameter("interfaceHandlerUrl", interfaceHandlerUrl);
+        interfaceHandler = new MockInterfaceHandler(contextPath, servletPath, interfaceHandlerUrl);
         container.addParameter(PATH_PREFIX + interfaceHandlerUrl, interfaceHandler);
 
-        engineHandlerUrl = withRandomPrefix("/engine.js");
+        moduleManager = new MockModuleManager(interfaceHandler);
+        container.addParameter("moduleManager", moduleManager);
+        final String engineHandlerUrl = withRandomPrefix("/engine.js");
         container.addParameter("engineHandlerUrl", engineHandlerUrl);
+        engineHandler = new MockCachingHandler(contextPath, servletPath, engineHandlerUrl);
         container.addParameter(PATH_PREFIX + engineHandlerUrl, engineHandler);
 
         dtoAllHandlerUrl = withRandomPrefix("/dtoAll.js");
@@ -68,50 +68,30 @@ public class AllScriptHandlerTest {
 
     @Test
     public void testGenerateContent() throws IOException {
-        final String contextPath = randomAlphabetic(10);
-        final String servletPath = randomAlphabetic(10);
-        final String pathInfo = randomAlphabetic(10);
-        final String engineJSContent = setUpEngineJS(contextPath, servletPath);
+        final String result = handler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
 
-        final String result = handler.generateCachableContent(contextPath, servletPath, pathInfo);
-
-        assertEquals(result, engineJSContent + "\n");
+        assertEquals(result, engineJS() + "\n");
     }
 
     @Test
     public void testGenerateContentWhenThereAreModules() throws IOException {
-        final String contextPath = randomAlphabetic(10);
-        final String servletPath = randomAlphabetic(10);
-        final String pathInfo = randomAlphabetic(10);
-        final String engineJSContent = setUpEngineJS(contextPath, servletPath);
-        final Collection<String> modules = givenModules(contextPath, servletPath, randomModuleName(), randomModuleName(), randomModuleName());
+        moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
 
-        final String result = handler.generateCachableContent(contextPath, servletPath, pathInfo);
+        final String result = handler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
 
-        assertEquals(result, engineJSContent + "\n" + join(modules, '\n') + "\n");
+        assertEquals(result, engineJS() + "\n" + join(allModules(), '\n') + "\n");
     }
 
     private String randomModuleName() {
         return "module" + randomAlphabetic(10);
     }
 
-    private Collection<String> givenModules(final String contextPath, final String servletPath, final String... names) throws IOException {
-        when(moduleManager.getModuleNames(false)).thenReturn(asList(names));
-        final Collection<String> modules = new ArrayList<String>();
-        for (final String each : names) {
-            final String moduleContent = format("[START]%s.js content %s [END]", each, randomAlphabetic(10));
-            when(interfaceHandler.generateCachableContent(contextPath, servletPath, interfaceHandlerUrl + each + EXTENSION_JS))
-                    .thenReturn(moduleContent);
-            modules.add(moduleContent);
-        }
-        return modules;
+    private String engineJS() {
+        return engineHandler.getContent();
     }
 
-    private String setUpEngineJS(final String contextPath, final String servletPath) throws IOException {
-        final String engineJSContent = "[START]EngineJS content " + randomAlphabetic(10) + " [END]";
-
-        when(engineHandler.generateCachableContent(contextPath, servletPath, engineHandlerUrl)).thenReturn(engineJSContent);
-        return engineJSContent;
+    private Collection<String> allModules() {
+        return interfaceHandler.getModuleContents();
     }
 
     private String withRandomPrefix(final String url) {
