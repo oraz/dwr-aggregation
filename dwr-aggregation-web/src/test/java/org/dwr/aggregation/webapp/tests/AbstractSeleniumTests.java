@@ -2,7 +2,7 @@ package org.dwr.aggregation.webapp.tests;
 
 import org.dwr.aggregation.webapp.tests.pages.AbstractPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterGroups;
@@ -23,7 +23,7 @@ public abstract class AbstractSeleniumTests {
     @BeforeGroups(groups = Acceptance)
     public final void initDriver() throws IOException {
         loadAcceptanceProperties();
-        driver = new FirefoxDriver();
+        driver = new HtmlUnitDriver(true);
         final int timeOutInSeconds = parseInt(acceptanceProperties.getProperty("webdriver.timeout"));
         wait = new WebDriverWait(driver, timeOutInSeconds, 50);
     }
