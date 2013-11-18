@@ -11,6 +11,7 @@ public abstract class AbstractPage<P extends AbstractPage> {
         this.wait = wait;
     }
 
+    @SuppressWarnings("unchecked")
     public final P andNow(final Verifier<P> verifier) {
         verifier.verify((P) this);
         return (P) this;
