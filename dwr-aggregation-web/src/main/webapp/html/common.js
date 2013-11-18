@@ -9,18 +9,20 @@ function onLoad(handler) {
 }
 
 onLoad(function () {
-    usersManager.getAllUsers(function (users) {
-        createList(users, 'users');
+    usersManager.getAllUsers({
+        callback: createList,
+        callbackArg: 'users'
     });
 
-    citiesManager.getAllCities(function (cities) {
-        createList(cities, 'cities');
+    citiesManager.getAllCities({
+        callback: createList,
+        callbackArg: 'cities'
     });
 
     function createList(data, elemId) {
         var list = document.createElement('ul');
         list.setAttribute('id', elemId);
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0, size = data.length; i < size; i++) {
             var item = document.createElement('li'),
                 text = document.createTextNode(data[i]);
             item.appendChild(text);
