@@ -47,7 +47,7 @@ public class MockInterfaceHandler extends CachingHandler {
 
     protected void add(final String... moduleNames) {
         for (final String name : moduleNames) {
-            final String content = format("[START]%s.js content %s [END]", name, randomAlphabetic(10));
+            final String content = format("[START]%s/%s.js content %s [END]", interfaceHandlerUrl, name, randomAlphabetic(10));
             modules.put(interfaceHandlerUrl + name + EXTENSION_JS, content);
         }
     }

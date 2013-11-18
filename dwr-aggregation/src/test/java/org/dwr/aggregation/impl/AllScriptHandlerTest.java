@@ -46,6 +46,7 @@ public class AllScriptHandlerTest {
 
         moduleManager = new MockModuleManager(interfaceHandler);
         container.addParameter("moduleManager", moduleManager);
+
         final String engineHandlerUrl = withRandomPrefix("/engine.js");
         container.addParameter("engineHandlerUrl", engineHandlerUrl);
         engineHandler = new MockCachingHandler(contextPath, servletPath, engineHandlerUrl);

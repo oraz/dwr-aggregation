@@ -19,7 +19,7 @@ public class MockCachingHandler extends CachingHandler {
         this.contextPath = contextPath;
         this.servletPath = servletPath;
         this.pathInfo = pathInfo;
-        content = format("[START] %s context %s [END]", pathInfo, randomAlphabetic(10));
+        content = format("[START] %s content %s [END]", pathInfo, randomAlphabetic(10));
     }
 
     @Override
