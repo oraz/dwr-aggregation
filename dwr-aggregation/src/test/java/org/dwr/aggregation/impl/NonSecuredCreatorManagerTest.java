@@ -24,19 +24,26 @@ public class NonSecuredCreatorManagerTest {
         };
     }
 
-    @Test(dataProvider = "debugModes")
-    public void testGetCreatorNamesIncludingHidden(final boolean debug) {
+    @Test
+    public void testGetCreatorNamesIncludingHiddenWhenDebugModeIsOn() {
         final String firstName = "first.js";
         final String secondName = "second.js";
         final String thirdName = "third.js";
         final Map<String, Creator> creators = givenCreators(firstName, secondName, thirdName);
-
-        manager.setDebug(debug);
+        manager.setDebug(true);
         manager.setCreators(creators);
 
         final Collection<String> creatorNames = manager.getCreatorNames(true);
 
         assertThat(creatorNames, containsInAnyOrder(firstName, secondName, thirdName));
+    }
+
+    @Test(expectedExceptions = SecurityException.class)
+    public void testGetCreatorNamesIncludingHiddenWhenDebugModeIsOff() {
+        manager.setDebug(false);
+        manager.setCreators(givenCreators("first.js", "second.js"));
+
+        manager.getCreatorNames(true);
     }
 
     @Test(dataProvider = "debugModes")

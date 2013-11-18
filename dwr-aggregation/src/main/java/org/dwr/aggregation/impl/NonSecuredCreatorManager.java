@@ -7,13 +7,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-import static java.util.Collections.unmodifiableSet;
-
 public class NonSecuredCreatorManager extends DefaultCreatorManager {
     @Override
     public Collection<String> getCreatorNames(final boolean includeHidden) throws SecurityException {
         if (includeHidden) {
-            return unmodifiableSet(creators.keySet());
+            return super.getCreatorNames(includeHidden);
         } else {
             final Collection<String> names = new HashSet<String>();
             for (final Map.Entry<String, Creator> each : creators.entrySet()) {
