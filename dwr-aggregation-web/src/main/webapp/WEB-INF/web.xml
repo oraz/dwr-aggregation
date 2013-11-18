@@ -7,7 +7,7 @@
         <servlet-name>dwr-invoker</servlet-name>
         <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
         <init-param>
-            <param-name>url:/dwr-all.js</param-name>
+            <param-name>url:/dwr-aggregated.js</param-name>
             <param-value>org.dwr.aggregation.impl.DwrAggregationHandler</param-value>
         </init-param>
         <init-param>
