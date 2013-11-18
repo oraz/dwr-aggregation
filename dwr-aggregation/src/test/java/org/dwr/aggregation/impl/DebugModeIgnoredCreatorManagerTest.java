@@ -13,8 +13,8 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class NonSecuredCreatorManagerTest {
-    private final NonSecuredCreatorManager manager = new NonSecuredCreatorManager();
+public class DebugModeIgnoredCreatorManagerTest {
+    private final DebugModeIgnoredCreatorManager manager = new DebugModeIgnoredCreatorManager();
 
     @DataProvider
     public Object[][] debugModes() {

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-public class NonSecuredCreatorManager extends DefaultCreatorManager {
+public class DebugModeIgnoredCreatorManager extends DefaultCreatorManager {
     @Override
     public Collection<String> getCreatorNames(final boolean includeHidden) throws SecurityException {
         if (includeHidden) {
