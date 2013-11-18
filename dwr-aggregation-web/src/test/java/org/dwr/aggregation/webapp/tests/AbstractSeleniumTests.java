@@ -1,10 +1,14 @@
 package org.dwr.aggregation.webapp.tests;
 
+import com.gargoylesoftware.htmlunit.AlertHandler;
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.WebClient;
 import org.dwr.aggregation.webapp.tests.pages.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 
@@ -23,7 +27,7 @@ public abstract class AbstractSeleniumTests {
     @BeforeGroups(groups = Acceptance)
     public final void initDriver() throws IOException {
         loadAcceptanceProperties();
-        driver = new HtmlUnitDriver(true);
+        driver = htmlUnitDriver();
         final int timeOutInSeconds = parseInt(acceptanceProperties.getProperty("webdriver.timeout"));
         wait = new WebDriverWait(driver, timeOutInSeconds, 50);
     }
@@ -58,5 +62,19 @@ public abstract class AbstractSeleniumTests {
         } catch (IllegalAccessException e) {
             throw new AssertionError(e);
         }
+    }
+
+    private WebDriver htmlUnitDriver() {
+        return new HtmlUnitDriver(true) {
+            @Override
+            protected WebClient modifyWebClient(final WebClient client) {
+                client.setAlertHandler(new AlertHandler() {
+                    public void handleAlert(final Page page, final String message) {
+                        Assert.fail(message);
+                    }
+                });
+                return super.modifyWebClient(client);
+            }
+        };
     }
 }

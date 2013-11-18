@@ -14,6 +14,10 @@
             <param-name>org.directwebremoting.extend.CreatorManager</param-name>
             <param-value>org.dwr.aggregation.impl.DebugModeIgnoredCreatorManager</param-value>
         </init-param>
+        <init-param>
+            <param-name>generateDtoClasses</param-name>
+            <param-value>dto,dtoall</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
 

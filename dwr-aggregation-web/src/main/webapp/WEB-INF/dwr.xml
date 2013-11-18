@@ -10,5 +10,8 @@
         <create creator="new" javascript="citiesManager">
             <param name="class" value="org.dwr.aggregation.webapp.remote.CitiesManager"/>
         </create>
+
+        <convert converter="bean" match="org.dwr.aggregation.webapp.remote.FirstFakeDTO" javascript="*"/>
+        <convert converter="bean" match="org.dwr.aggregation.webapp.remote.SecondFakeDTO"/>
     </allow>
 </dwr>

@@ -9,6 +9,9 @@ function onLoad(handler) {
 }
 
 onLoad(function () {
+    assertTrue(typeof FirstFakeDTO !== 'undefined', 'FirstFakeDTO must be defined');
+    assertTrue(typeof SecondFakeDTO === 'undefined', 'FirstFakeDTO must not be defined');
+
     usersManager.getAllUsers({
         callback: createList,
         callbackArg: 'users'
@@ -29,5 +32,11 @@ onLoad(function () {
             list.appendChild(item);
         }
         document.body.appendChild(list);
+    }
+
+    function assertTrue(condition, msg) {
+        if (!condition) {
+            alert(msg);
+        }
     }
 });
