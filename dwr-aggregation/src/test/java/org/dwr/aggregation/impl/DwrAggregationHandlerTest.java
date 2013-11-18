@@ -25,8 +25,8 @@ public class DwrAggregationHandlerTest {
     private MockInterfaceHandler interfaceHandler;
     private MockCachingHandler engineHandler;
     private MockCachingHandler dtoAllHandler;
-    private String contextPath = randomAlphabetic(10);
-    private String servletPath = randomAlphabetic(10);
+    private String contextPath;
+    private String servletPath;
 
     @BeforeMethod
     public void setUp(final Method test) {
@@ -56,10 +56,10 @@ public class DwrAggregationHandlerTest {
             container.addParameter("generateDtoClasses", test.getAnnotation(GenerateDtoClasses.class).value());
         }
 
-        container.addParameter("/dwr-aggregation.js", DwrAggregationHandler.class.getName());
+        container.addParameter(PATH_PREFIX + "/dwr-aggregation.js", DwrAggregationHandler.class.getName());
         container.setupFinished();
 
-        aggregationHandler = (CachingHandler) container.getBean("/dwr-aggregation.js");
+        aggregationHandler = (CachingHandler) container.getBean(PATH_PREFIX + "/dwr-aggregation.js");
     }
 
     @Test
