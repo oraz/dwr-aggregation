@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.directwebremoting.servlet.PathConstants.PATH_PREFIX;
 import static org.directwebremoting.util.MimeConstants.MIME_JS;
@@ -93,6 +94,36 @@ public class DwrAggregationHandlerTest {
     }
 
     @Test
+    @GenerateDtoClasses("dtoall,dto")
+    public void testWhenGenerateDtoStartsWith_dtoall() throws IOException {
+        moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
+
+        final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
+
+        assertEquals(result, engineJS() + "\n" + dtoAllJS() + "\n" + join(allModules(), '\n') + "\n");
+    }
+
+    @Test
+    @GenerateDtoClasses("interfacce,dtoall,dto")
+    public void testWhenGenerateDtoClassesContains_dtoall_inTheMiddle() throws IOException {
+        moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
+
+        final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
+
+        assertEquals(result, engineJS() + "\n" + dtoAllJS() + "\n" + join(allModules(), '\n') + "\n");
+    }
+
+    @Test
+    @GenerateDtoClasses("dto,dtoall")
+    public void testWhenGenerateDtoEndsWith_dtoall() throws IOException {
+        moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
+
+        final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
+
+        assertEquals(result, engineJS() + "\n" + dtoAllJS() + "\n" + join(allModules(), '\n') + "\n");
+    }
+
+    @Test
     @GenerateDtoClasses("dto")
     public void testWhenGenerateDtoClassesIs_dto() throws IOException {
         moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
@@ -105,6 +136,16 @@ public class DwrAggregationHandlerTest {
     @Test
     @GenerateDtoClasses("interface")
     public void testWhenGenerateDtoClassesIs_interface() throws IOException {
+        moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
+
+        final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
+
+        assertEquals(result, engineJS() + "\n" + join(allModules(), '\n') + "\n");
+    }
+
+    @Test
+    @GenerateDtoClasses(EMPTY)
+    public void testWhenGenerateDtoClassesIs_empty() throws IOException {
         moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
 
         final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
