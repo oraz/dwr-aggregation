@@ -15,6 +15,7 @@
     <properties>
         <dwr.version>3.0_RC2</dwr.version>
     </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -42,6 +43,7 @@
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <dependency>
             <groupId>org.directwebremoting</groupId>
