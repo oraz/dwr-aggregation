@@ -8,7 +8,7 @@
         <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
         <init-param>
             <param-name>url:/dwr-all.js</param-name>
-            <param-value>org.dwr.aggregation.impl.AllScriptHandler</param-value>
+            <param-value>org.dwr.aggregation.impl.DwrAggregationHandler</param-value>
         </init-param>
         <init-param>
             <param-name>org.directwebremoting.extend.CreatorManager</param-name>

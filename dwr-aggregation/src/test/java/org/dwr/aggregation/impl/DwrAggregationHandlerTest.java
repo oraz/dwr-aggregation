@@ -5,35 +5,30 @@ import org.directwebremoting.servlet.CachingHandler;
 import org.dwr.aggregation.impl.mock.MockCachingHandler;
 import org.dwr.aggregation.impl.mock.MockInterfaceHandler;
 import org.dwr.aggregation.impl.mock.MockModuleManager;
-import org.mockito.Mock;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.directwebremoting.servlet.PathConstants.PATH_PREFIX;
 import static org.directwebremoting.util.MimeConstants.MIME_JS;
-import static org.mockito.MockitoAnnotations.initMocks;
 import static org.testng.Assert.assertEquals;
 
-public class AllScriptHandlerTest {
-    private AllScriptHandler handler;
+public class DwrAggregationHandlerTest {
+    private CachingHandler aggregationHandler;
     private MockModuleManager moduleManager;
     private MockInterfaceHandler interfaceHandler;
     private MockCachingHandler engineHandler;
-    private String dtoAllHandlerUrl;
-    @Mock
-    private CachingHandler dtoAllHandler;
+    private MockCachingHandler dtoAllHandler;
     private String contextPath = randomAlphabetic(10);
     private String servletPath = randomAlphabetic(10);
 
     @BeforeMethod
-    public void setUp() {
-        initMocks(this);
-
+    public void setUp(final Method test) {
         contextPath = randomAlphabetic(10);
         servletPath = randomAlphabetic(10);
 
@@ -52,24 +47,28 @@ public class AllScriptHandlerTest {
         engineHandler = new MockCachingHandler(contextPath, servletPath, engineHandlerUrl);
         container.addParameter(PATH_PREFIX + engineHandlerUrl, engineHandler);
 
-        dtoAllHandlerUrl = withRandomPrefix("/dtoAll.js");
+        final String dtoAllHandlerUrl = withRandomPrefix("/dtoAll.js");
         container.addParameter("dtoAllHandlerUrl", dtoAllHandlerUrl);
+        dtoAllHandler = new MockCachingHandler(contextPath, servletPath, dtoAllHandlerUrl);
         container.addParameter(PATH_PREFIX + dtoAllHandlerUrl, dtoAllHandler);
+        if (test.isAnnotationPresent(GenerateDtoClasses.class)) {
+            container.addParameter("generateDtoClasses", test.getAnnotation(GenerateDtoClasses.class).value());
+        }
 
-        container.addParameter("/dwr-aggregation.js", AllScriptHandler.class.getName());
+        container.addParameter("/dwr-aggregation.js", DwrAggregationHandler.class.getName());
         container.setupFinished();
 
-        handler = (AllScriptHandler) container.getBean("/dwr-aggregation.js");
+        aggregationHandler = (CachingHandler) container.getBean("/dwr-aggregation.js");
     }
 
     @Test
     public void testMimeTypeMustBeJavaScript() {
-        assertEquals(handler.getMimeType(), MIME_JS);
+        assertEquals(aggregationHandler.getMimeType(), MIME_JS);
     }
 
     @Test
     public void testGenerateContent() throws IOException {
-        final String result = handler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
+        final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
 
         assertEquals(result, engineJS() + "\n");
     }
@@ -78,7 +77,37 @@ public class AllScriptHandlerTest {
     public void testGenerateContentWhenThereAreModules() throws IOException {
         moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
 
-        final String result = handler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
+        final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
+
+        assertEquals(result, engineJS() + "\n" + join(allModules(), '\n') + "\n");
+    }
+
+    @Test
+    @GenerateDtoClasses("dtoall")
+    public void testWhenGenerateDtoClassesIs_dtoall() throws IOException {
+        moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
+
+        final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
+
+        assertEquals(result, engineJS() + "\n" + dtoAllJS() + "\n" + join(allModules(), '\n') + "\n");
+    }
+
+    @Test
+    @GenerateDtoClasses("dto")
+    public void testWhenGenerateDtoClassesIs_dto() throws IOException {
+        moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
+
+        final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
+
+        assertEquals(result, engineJS() + "\n" + join(allModules(), '\n') + "\n");
+    }
+
+    @Test
+    @GenerateDtoClasses("interface")
+    public void testWhenGenerateDtoClassesIs_interface() throws IOException {
+        moduleManager.add(randomModuleName(), randomModuleName(), randomModuleName());
+
+        final String result = aggregationHandler.generateCachableContent(contextPath, servletPath, "/dwr-aggregation.js");
 
         assertEquals(result, engineJS() + "\n" + join(allModules(), '\n') + "\n");
     }
@@ -89,6 +118,10 @@ public class AllScriptHandlerTest {
 
     private String engineJS() {
         return engineHandler.getContent();
+    }
+
+    private String dtoAllJS() {
+        return dtoAllHandler.getContent();
     }
 
     private Collection<String> allModules() {

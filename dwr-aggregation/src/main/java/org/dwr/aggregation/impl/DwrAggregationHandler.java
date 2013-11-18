@@ -12,7 +12,7 @@ import static org.directwebremoting.servlet.PathConstants.PATH_PREFIX;
 import static org.directwebremoting.util.LocalUtil.getSystemClassloadTime;
 import static org.directwebremoting.util.MimeConstants.MIME_JS;
 
-public class AllScriptHandler extends CachingHandler implements InitializingBean {
+public class DwrAggregationHandler extends CachingHandler implements InitializingBean {
     private ModuleManager moduleManager;
     private String interfaceHandlerUrl;
     private CachingHandler interfaceHandler;
@@ -22,7 +22,7 @@ public class AllScriptHandler extends CachingHandler implements InitializingBean
     private boolean includeDtoAll;
     private String dtoAllHandlerUrl;
 
-    public AllScriptHandler() {
+    public DwrAggregationHandler() {
         setMimeType(MIME_JS);
     }
 
@@ -33,7 +33,7 @@ public class AllScriptHandler extends CachingHandler implements InitializingBean
                 .append(engineHandler.generateCachableContent(contextPath, servletPath, engineHandlerUrl))
                 .append('\n');
         if (includeDtoAll) {
-            scriptBuilder.append("/*dtoAll*/\n")
+            scriptBuilder
                     .append(dtoAllHandler.generateCachableContent(contextPath, servletPath, dtoAllHandlerUrl))
                     .append('\n');
         }
