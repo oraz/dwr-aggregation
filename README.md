@@ -25,7 +25,7 @@ with sources, unzip it and run mvn install.
     <artifactId>dwr-aggregation</artifactId>
     <version>1.0</version>
 </dependency>
-````
+```
 
 ### Configure DWR servlet in web.xml
 ```xml
@@ -40,7 +40,7 @@ with sources, unzip it and run mvn install.
         <param-value>org.dwr.aggregation.impl.DebugModeIgnoredCreatorManager</param-value>
     </init-param>
 </servlet>
-````
+```
 If you configured DWR to [map Java classes to JavaScript classes](http://directwebremoting.org/dwr/documentation/server/configuration/dwrxml/converters/bean.html#mappingJavaToJavaScript "Mapping Java classes to JavaScript classes") 
 you should add one more param to reduce size of aggregated script.
 ```xml
@@ -51,7 +51,7 @@ you should add one more param to reduce size of aggregated script.
         <param-value>dtoall</param-value>
     </init-param>
 </servlet>
-````
+```
 
 ### Change your html to load all interfaces as single js resource.
 Was:
@@ -60,8 +60,8 @@ Was:
 <script src="/dwr/dtoall.je"></script>
 <script src="/dwr/interface/userManager.je"></script>
 <script src="/dwr/interface/cityManager.je"></script>
-````
+```
 Now:
 ```html
 <script src="/dwr/dwr-aggregated.je"></script>
-````
+```
