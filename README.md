@@ -3,13 +3,19 @@
 
 This plugin aggregates all DWR interface scripts into single JS resource including engine.js and dtoall.js
 
-__Warning__: Plugin supports [DWR 3.0 RC2] (http://directwebremoting.org/dwr/downloads/index.html "The current best version of DWR") and wasn't tested with [DWR 3.0 RC3] (http://oss.sonatype.org/content/repositories/snapshots/org/directwebremoting/dwr/3.0.0-rc3-SNAPSHOT/ "Development version") since it's under development.
+__Warning__: Plugin supports [DWR 3.0 RC2](http://directwebremoting.org/dwr/downloads/index.html "The current best version of DWR") 
+and wasn't tested with [DWR 3.0 RC3](http://oss.sonatype.org/content/repositories/snapshots/org/directwebremoting/dwr/3.0.0-rc3-SNAPSHOT/ "Development version") since it's under development.
 
 ## Usage
 ### Install DWR aggregation to your local Maven repository
 In command line perform:
-1. git clone ...
+
+1. git clone git&#64;github.com:oraz/dwr-aggregation.git
+
 2. mvn install
+
+Or download [zip archive](https://github.com/oraz/dwr-aggregation/archive/master.zip "Master zip") 
+with sources, unzip it and run mvn install.
 
 ### Add dependency in your project
 ```xml
@@ -34,7 +40,8 @@ In command line perform:
     </init-param>
 </servlet>
 ````
-If you configured DWR to [map Java classes to JavaScript classes] (http://directwebremoting.org/dwr/documentation/server/configuration/dwrxml/converters/bean.html#mappingJavaToJavaScript "Mapping Java classes to JavaScript classes") you should add one more param to reduce size of aggregated script.
+If you configured DWR to [map Java classes to JavaScript classes](http://directwebremoting.org/dwr/documentation/server/configuration/dwrxml/converters/bean.html#mappingJavaToJavaScript "Mapping Java classes to JavaScript classes") 
+you should add one more param to reduce size of aggregated script.
 ```xml
 <servlet>
     <!-- DWR servlet definition here -->
