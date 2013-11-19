@@ -1,7 +1,8 @@
 # Aggregation Plugin for DWR
 
 
-This plugin aggregates all DWR interface scripts into single JS resource including engine.js and dtoall.js
+This plugin aggregates all DWR interface scripts into single JS resource including engine.js and dtoall.js 
+to reduce amount of http requests.
 
 __Warning__: Plugin supports [DWR 3.0 RC2](http://directwebremoting.org/dwr/downloads/index.html "The current best version of DWR") 
 and wasn't tested with [DWR 3.0 RC3](http://oss.sonatype.org/content/repositories/snapshots/org/directwebremoting/dwr/3.0.0-rc3-SNAPSHOT/ "Development version") since it's under development.
@@ -50,6 +51,19 @@ you should add one more param to reduce size of aggregated script.
         <param-value>dtoall</param-value>
     </init-param>
 </servlet>
+````
+
+### Change your html to load all interfaces as single js resource.
+Was:
+```html
+<script src="/dwr/engine.je"></script>
+<script src="/dwr/dtoall.je"></script>
+<script src="/dwr/interface/userManager.je"></script>
+<script src="/dwr/interface/cityManager.je"></script>
+````
+Now:
+```html
+<script src="/dwr/dwr-aggregated.je"></script>
 ````
 
 
