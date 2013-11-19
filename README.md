@@ -1,7 +1,7 @@
 # Aggregation Plugin for DWR
 
 
-This plugin aggregates all DWR modules into single JS resource including engine.js and dtoall.js
+This plugin aggregates all DWR interface scripts into single JS resource including engine.js and dtoall.js
 
 __Warning__: Plugin supports [DWR 3.0 RC2] (http://directwebremoting.org/dwr/downloads/index.html "The current best version of DWR") and wasn't tested with [DWR 3.0 RC3] (http://oss.sonatype.org/content/repositories/snapshots/org/directwebremoting/dwr/3.0.0-rc3-SNAPSHOT/ "Development version") since it's under development.
 
@@ -23,6 +23,7 @@ In command line perform:
 ### Configure DWR servlet in web.xml
 ```xml
 <servlet>
+    <!-- DWR servlet definition here -->
     <init-param>
         <param-name>url:/dwr-aggregated.js</param-name>
         <param-value>org.dwr.aggregation.impl.DwrAggregationHandler</param-value>
@@ -31,6 +32,12 @@ In command line perform:
         <param-name>org.directwebremoting.extend.CreatorManager</param-name>
         <param-value>org.dwr.aggregation.impl.DebugModeIgnoredCreatorManager</param-value>
     </init-param>
+</servlet>
+````
+If you configured DWR to [map Java classes to JavaScript classes] (http://directwebremoting.org/dwr/documentation/server/configuration/dwrxml/converters/bean.html#mappingJavaToJavaScript "Mapping Java classes to JavaScript classes") you should add one more param to reduce size of aggregated script.
+```xml
+<servlet>
+    <!-- DWR servlet definition here -->
     <init-param>
         <param-name>generateDtoClasses</param-name>
         <param-value>dtoall</param-value>
