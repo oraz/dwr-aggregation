@@ -1,6 +1,5 @@
 # Aggregation Plugin for DWR
 
-
 This plugin aggregates all DWR interface scripts into single JS resource including engine.js and dtoall.js 
 to reduce amount of http requests.
 
@@ -66,5 +65,3 @@ Now:
 ```html
 <script src="/dwr/dwr-aggregated.je"></script>
 ````
-
-
