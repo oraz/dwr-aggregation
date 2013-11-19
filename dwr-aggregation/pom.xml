@@ -34,8 +34,8 @@
                             <version>${dwr.version}</version>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
-                            <file>src/main/libs/dwr.jar</file>
-                            <sources>src/main/libs/dwr-src.jar</sources>
+                            <file>src/main/libs/dwr3.0_rc2.jar</file>
+                            <sources>src/main/libs/dwr3.0_rc2-src.jar</sources>
                             <createChecksum>true</createChecksum>
                         </configuration>
                     </execution>
