@@ -4,11 +4,12 @@
 This plugin aggregates all DWR interface scripts into single JS resource including engine.js and dtoall.js 
 to reduce amount of http requests.
 
-__Warning__: Plugin supports [DWR 3.0 RC2](http://directwebremoting.org/dwr/downloads/index.html "The current best version of DWR") 
-and wasn't tested with [DWR 3.0 RC3](http://oss.sonatype.org/content/repositories/snapshots/org/directwebremoting/dwr/3.0.0-rc3-SNAPSHOT/ "Development version") since it's under development.
+__Supported DWR version__: plugin supports [DWR 3.0 RC2](http://directwebremoting.org/dwr/downloads/index.html "The current best version of DWR"). 
+It wasn't tested with [DWR 3.0 RC3](http://oss.sonatype.org/content/repositories/snapshots/org/directwebremoting/dwr/3.0.0-rc3-SNAPSHOT/ "Development version") 
+since it's in development stage.
 
 ## Usage
-### Install DWR aggregation to your local Maven repository
+### Add DWR aggregation plugin to your local Maven repository
 In command line perform:
 
 1. git clone git&#64;github.com:oraz/dwr-aggregation.git
